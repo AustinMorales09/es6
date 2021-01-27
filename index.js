@@ -721,7 +721,19 @@ console.log(novel.writer);  // newAuthor
 
 // In other words, you are abstracting implementation details from the user.
 // Only change code below this line
+class Thermostat{
+  constructor(fahrenheit){
+    this.fahrenheit = fahrenheit;
+  }
 
+  get temperature() {
+    return (5/9) * (this.fahrenheit - 32);
+  }
+
+  set temperature(celsius){
+    this.fahrenheit = (celsius * 9) / 5 + 32;
+  }
+}
 // Only change code above this line
 
 const thermos = new Thermostat(76); // Setting in Fahrenheit scale
@@ -739,9 +751,7 @@ temp = thermos.temperature; // 26 in Celsius
 // Add a script to the HTML document of type module and give it the source file of index.js
 <html>
   <body>
-    {/*  Only change code below this line 
-
-     Only change code above this line */}
+  <script type="module" src="index.js"></script>
   </body> 
 </html>
 
@@ -765,14 +775,14 @@ temp = thermos.temperature; // 26 in Celsius
 // export { add, subtract };
 // There are two string-related functions in the editor. Export both of them using the method of your choice.
 
- const uppercaseString = (string) => {
+ export const uppercaseString = (string) => {
     return string.toUpperCase();
   }
   
- const lowercaseString = (string) => {
+  export const lowercaseString = (string) => {
     return string.toLowerCase()
   }
-
+export {uppercaseString, lowercaseString}
 //   24 ES6: Reuse JavaScript Code Using import
 // import allows you to choose which parts of a file or module to load. In the previous lesson, the examples exported add from the math_functions.js file. Here's how you can import it to use in another file:
 
@@ -784,7 +794,7 @@ temp = thermos.temperature; // 26 in Celsius
 // import { add, subtract } from './math_functions.js';
 // Add the appropriate import statement that will allow the current file to use the uppercaseString and lowercaseString functions you exported in the previous lesson. These functions are in a file called string_functions.js, which is in the same directory as the current file.
 
-  
+import {uppercaseString, lowercaseString} from './string_functions.js';
 // Only change code above this line
 
 uppercaseString("hello");
@@ -800,6 +810,7 @@ lowercaseString("WORLD!");
 // myMathModule.subtract(5,3);
 // The code in this file requires the contents of the file: string_functions.js, that is in the same directory as the current file. Use the import * as syntax to import everything from the file into an object called stringFunctions.
 
+import * as stringFunctions from './string_functions.js';
 // Only change code above this line
 
 stringFunctions.uppercaseString("hello");
@@ -813,15 +824,15 @@ stringFunctions.lowercaseString("WORLD!");
 
 // Below are examples using export default:
 
-// // named function
-// export default function add(x, y) {
-//   return x + y;
-// }
+// named function
+export default function add(x, y) {
+  return x + y;
+}
 
-// // anonymous function
-// export default function(x, y) {
-//   return x + y;
-// }
+// anonymous function
+export default function(x, y) {
+  return x + y;
+}
 // Since export default is used to declare a fallback value for a module or file, you can only have one value be a default export in each module or file. Additionally, you cannot use export default with var, let, or const
 
 // The following function should be the fallback value for the module. Please add the necessary code to do so.
@@ -829,7 +840,9 @@ function subtract(x, y) {
     return x - y;
   }
 
-  
+  export default function(x,y){
+    return x-y;
+  }
 
 //   27 ES6: Import a Default Export
 // In the last challenge, you learned about export default and its uses. To import a default export, you need to use a different import syntax. In the following example, add is the default export of the math_functions.js file. Here is how to import it:
@@ -838,7 +851,7 @@ function subtract(x, y) {
 // The syntax differs in one key place. The imported value, add, is not surrounded by curly braces ({}). add here is simply a variable name for whatever the default export of the math_functions.js file is. You can use any name here when importing a default.
 
 // In the following code, import the default export from the math_functions.js file, found in the same directory as this file. Give the import the name subtract.
-  
+  import subtract from './math_functions.js'
 // Only change code above this line
 
 subtract(7,4);
@@ -851,7 +864,9 @@ subtract(7,4);
 // });
 // Create a new promise called makeServerRequest. Pass in a function with resolve and reject parameters to the constructor.
 
+const makeServerRequest = new Promise((resolve, reject) =>{
 
+});
 
 // 29 ES6: Complete a Promise with resolve and reject
 // A promise has three states: pending, fulfilled, and rejected. The promise you created in the last challenge is forever stuck in the pending state because you did not add a way to complete the promise. The resolve and reject parameters given to the promise argument are used to do this. resolve is used when you want your promise to succeed, and reject is used when you want it to fail. These are methods that take an argument, as seen below.
@@ -866,15 +881,17 @@ subtract(7,4);
 // The example above uses strings for the argument of these functions, but it can really be anything. Often, it might be an object, that you would use data from, to put on your website or elsewhere.
 
 // Make the promise handle success and failure. If responseFromServer is true, call the resolve method to successfully complete the promise. Pass resolve a string with the value We got the data. If responseFromServer is false, use the reject method instead and pass it the string: Data not received.
+
+
 const makeServerRequest = new Promise((resolve, reject) => {
     // responseFromServer represents a response from a server
     let responseFromServer;
       
     if(responseFromServer) {
         
-      // Change this line
+      resolve('We got the data!');
     } else {  
-      // Change this line
+      reject("Data not received");
     }
   });
 
@@ -898,6 +915,10 @@ const makeServerRequest = new Promise((resolve, reject) => {
       reject("Data not received");
     }
   });
+
+  makeServerRequest.then(result =>{
+    console.log(result);
+  })
 
 //   31 ES6: Handle a Rejected Promise with catch
 
@@ -923,4 +944,7 @@ const makeServerRequest = new Promise((resolve, reject) => {
   
   makeServerRequest.then(result => {
     console.log(result);
+  });
+  makeServerRequest.catch(error=> {
+    console.log(error);
   });
