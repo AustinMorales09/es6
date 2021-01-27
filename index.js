@@ -58,15 +58,15 @@ catTalk();
 // // returns 3
 // This behavior will cause problems if you were to create a function and store it for later use inside a for loop that uses the i variable. This is because the stored function will always refer to the value of the updated global i variable.
 
-// var printNumTwo;
-// for (var i = 0; i < 3; i++) {
-//   if (i === 2) {
-//     printNumTwo = function() {
-//       return i;
-//     };
-//   }
-// }
-// console.log(printNumTwo());
+var printNumTwo;
+for (var i = 0; i < 3; i++) {
+  if (i === 2) {
+    printNumTwo = function() {
+      return i;
+    };
+  }
+}
+console.log(printNumTwo());
 // // returns 3
 // As you can see, printNumTwo() prints 3 and not 2. This is because the value assigned to i was updated and the printNumTwo() returns the global i and not the value i had when the function was created in the for loop. The let keyword does not follow this behavior:
 
@@ -92,7 +92,7 @@ function checkScope() {
     'use strict';
     var i = 'function scope';
     if (true) {
-      i = 'block scope';
+      let i = 'block scope';
       console.log('Block scope i is: ', i);
     }
     console.log('Function scope i is: ', i);
@@ -106,8 +106,8 @@ function checkScope() {
 
   // const has all the awesome features that let has, with the added bonus that variables declared using const are read-only. They are a constant value, which means that once a variable is assigned with const, it cannot be reassigned.
   
-  // const FAV_PET = "Cats";
-  // FAV_PET = "Dogs"; // returns error
+  const FAV_PET = "Cats";
+  FAV_PET = "Dogs"; // returns error
   // As you can see, trying to reassign a variable declared with const will throw an error. You should always name variables you don't want to reassign using the const keyword. This helps when you accidentally attempt to reassign a variable that is meant to stay constant. A common practice when naming constants is to use all uppercase letters, with words separated by an underscore.
   
   // Note: It is common for developers to use uppercase variable identifiers for immutable values and lowercase or camelCase for mutable values (objects and arrays). In a later challenge you will see an example of a lowercase variable identifier being used for an array.
@@ -119,9 +119,9 @@ function checkScope() {
   
     // Only change code below this line
   
-    var sentence = str + " is cool!";
-    for (var i = 0; i < str.length; i+=2) {
-      console.log(sentence);
+    const SENTENCE = str + " is cool!";
+    for (let i = 0; i < str.length; i+=2) {
+      console.log(SENTENCE);
     }
   
     // Only change code above this line
@@ -156,9 +156,11 @@ function checkScope() {
 function editInPlace() {
   'use strict';
   // Only change code below this line
-
+s[0] = 2;
+s[1] = 5;
+s[2] = 7;
   // Using s = [2, 5, 7] would be invalid
-
+console.log(s)
   // Only change code above this line
 }
 editInPlace();
@@ -189,7 +191,7 @@ function freezeObj() {
       PI: 3.14
     };
     // Only change code below this line
-  
+    Object.freeze(MATH_CONSTANTS);
   
     // Only change code above this line
     try {
@@ -225,10 +227,12 @@ function freezeObj() {
   
   // Rewrite the function assigned to the variable magic which returns a new Date() to use arrow function syntax. Also, make sure nothing is defined using the keyword var.
 //setup
-  var magic = function() {
+  const magic = () => {
     "use strict";
     return new Date();
   };
+  
+  
 
 
   // 7.Write Arrow Functions with Parameters
@@ -248,7 +252,7 @@ function freezeObj() {
   // multiplier(4, 2); // returns 8
   // Rewrite the myConcat function which appends contents of arr2 to arr1 so that the function uses arrow function syntax.
 
-  var myConcat = function(arr1, arr2) {
+  const myConcat = (arr1, arr2) => {
     "use strict";
     return arr1.concat(arr2);
   };
@@ -262,18 +266,18 @@ function freezeObj() {
 
 // Check out this code:
 
-// const greeting = (name = "Anonymous") => "Hello " + name;
+const greeting = (name = "Anonymous") => "Hello " + name;
 
-// console.log(greeting("John")); // Hello John
-// console.log(greeting()); // Hello Anonymous
+console.log(greeting("John")); // Hello John
+console.log(greeting()); // Hello Anonymous
 // The default parameter kicks in when the argument is not specified (it is undefined). As you can see in the example above, the parameter name will receive its default value "Anonymous" when you do not provide a value for the parameter. You can add default values for as many parameters as you want.
 
 // Modify the function increment by adding default parameters so that it will add 1 to number if value is not specified.
 
 // Only change code below this line
-const increment = (number, value) => number + value;
+const increment = (number, value = 1) => number + value;
 // Only change code above this line
-
+increment(3)
 
 
 
@@ -300,7 +304,7 @@ function howMany(...args) {
 
   //setup
 
-const sum = (x, y, z) => {
+const sum = (...args) => {
     const args = [x, y, z];
     return args.reduce((a, b) => a + b, 0);
   }
@@ -322,16 +326,13 @@ const sum = (x, y, z) => {
   
   // const spreaded = ...arr; // will throw a syntax error
   // Copy all contents of arr1 into another array arr2 using the spread operator.
-  
-  
-
 
 
 //setup
   const arr1 = ['JAN', 'FEB', 'MAR', 'APR', 'MAY'];
 let arr2;
 
-arr2 = [];  // Change this line
+arr2 = [...arr1];  // Change this line
 
 console.log(arr2);
 
@@ -369,13 +370,11 @@ const HIGH_TEMPERATURES = {
   const tomorrow = HIGH_TEMPERATURES.tomorrow;
   
   // Only change code above this line
+  const {today, tomorrow} = HIGH_TEMPERATURES;
 
-  
   // Only change code below this line
   
-  const {today, tomorrow} = HIGH_TEMPERATURES;
   
-  // Only change code above this line
 
 
   
@@ -402,9 +401,9 @@ const HIGH_TEMPERATURES = {
   };
   
   // Only change code below this line
-  
-  const today = HIGH_TEMPERATURES.today;
-  const tomorrow = HIGH_TEMPERATURES.tomorrow;
+  const {today: highToday, tomorrow: highTomorrow} = HIGH_TEMPERATURES;
+
+
   
   // Only change code above this line
   
@@ -418,15 +417,23 @@ const HIGH_TEMPERATURES = {
 
 // Using an object similar to previous examples:
 
-// const user = {
-//   johnDoe: { 
-//     age: 34,
-//     email: 'johnDoe@freeCodeCamp.com'
-//   }
-// };
+const user = {
+  johnDoe: { 
+    age: 34,
+    email: 'johnDoe@freeCodeCamp.com'
+  },
+  johnDoew: { 
+    age: 34,
+    email: 'johnDoe@freeCodeCamp.com'
+  },
+  johnDoes: { 
+    age: 34,
+    email: 'johnDoe@freeCodeCamp.com'
+  }
+};
 // Here's how to extract the values of object properties and assign them to variables with the same name:
 
-// const { johnDoe: { age, email }} = user;
+// const { johnDoes: { age, email }} = user;
 // And here's how you can assign an object properties' values to variables with different names:
 
 // const { johnDoe: { age: userAge, email: userEmail }} = user;
@@ -439,9 +446,9 @@ const HIGH_TEMPERATURES = {
   };
   
   // Only change code below this line
-    
-  const lowToday = LOCAL_FORECAST.today.low;
-  const highToday = LOCAL_FORECAST.today.high;
+  
+  const {today: {low: lowToday, high: highToday}} = LOCAL_FORECAST;
+
   
   // Only change code above this line
   
@@ -466,7 +473,7 @@ const HIGH_TEMPERATURES = {
   //setup
   let a = 8, b = 6;
 // Only change code below this line
-
+[a,b] = [b,a]
 
 
 
@@ -487,7 +494,7 @@ const source = [1,2,3,4,5,6,7,8,9,10];
 function removeFirstTwo(list) {
   "use strict";
   // Only change code below this line
-  const arr = list; // Change this line
+  const [a,b, ...arr] = list; // Change this line
   // Only change code above this line
   return arr;
 }
@@ -527,7 +534,7 @@ const stats = {
   };
   
   // Only change code below this line
-  const half = (stats) => (stats.max + stats.min) / 2.0; 
+  const half = ({max, min}) => (max+min) / 2.0; 
   // Only change code above this line
   
 
@@ -571,6 +578,9 @@ const result = {
   function makeList(arr) {
     // Only change code below this line
     const failureItems = [];
+    for (let i =0; i < arr.length; i++){
+      failureItems.push(`<li class="text-warning">${arr[i]}</li>`)
+    }
     // Only change code above this line
   
     return failureItems;
@@ -594,9 +604,9 @@ const result = {
 const createPerson = (name, age, gender) => {
     // Only change code below this line
     return {
-      name: name,
-      age: age,
-      gender: gender
+      name,
+      age,
+      gender
     };
     // Only change code above this line
   };
@@ -623,7 +633,7 @@ const createPerson = (name, age, gender) => {
 // Only change code below this line
 const bicycle = {
     gear: 2,
-    setGear: function(newGear) {
+    setGear(newGear) {
       this.gear = newGear;
     }
   };
@@ -655,12 +665,17 @@ const bicycle = {
 
 // UpperCamelCase should be used by convention for ES6 class names, as in SpaceShuttle used above.
 // The constructor method is a special method for creating and initializing an object created with a class. You will learn more about it in the Object Oriented Programming section of the JavaScript Algorithms And Data Structures Certification.
+
 // Use the class keyword and write a constructor to create the Vegetable class.
 
 // The Vegetable class allows you to create a vegetable object with a property name that gets passed to the constructor.
 
 // Only change code below this line
-
+class Vegetable {
+  constructor(name){
+    this.name = name;
+  }
+}
 // Only change code above this line
 
 const carrot = new Vegetable('carrot');
@@ -675,23 +690,23 @@ console.log(carrot.name); // Should display 'carrot'
 
 // Setter functions are meant to modify (set) the value of an object's private variable based on the value passed into the setter function. This change could involve calculations, or even overwriting the previous value completely.
 
-// class Book {
-//   constructor(author) {
-//     this._author = author;
-//   }
-//   // getter
-//   get writer() {
-//     return this._author;
-//   }
-//   // setter
-//   set writer(updatedAuthor) {
-//     this._author = updatedAuthor;
-//   }
-// }
-// const novel = new Book('anonymous');
-// console.log(novel.writer);  // anonymous
-// novel.writer = 'newAuthor';
-// console.log(novel.writer);  // newAuthor
+class Book {
+  constructor(author) {
+    this._author = author;
+  }
+  // getter
+  get writer() {
+    return this._author;
+  }
+  // setter
+  set writer(updatedAuthor) {
+    this._author = updatedAuthor;
+  }
+}
+const novel = new Book('anonymous');
+console.log(novel.writer);  // anonymous
+novel.writer = 'newAuthor';
+console.log(novel.writer);  // newAuthor
 // Notice the syntax used to invoke the getter and setter. They do not even look like functions. Getters and setters are important because they hide internal implementation details. Note: It is convention to precede the name of a private variable with an underscore (_). However, the practice itself does not make a variable private.
 
 // Use the class keyword to create a Thermostat class. The constructor accepts a Fahrenheit temperature.
@@ -705,7 +720,14 @@ console.log(carrot.name); // Should display 'carrot'
 // This is the power of a getter and a setter. You are creating an API for another user, who can get the correct result regardless of which one you track.
 
 // In other words, you are abstracting implementation details from the user.
+// Only change code below this line
 
+// Only change code above this line
+
+const thermos = new Thermostat(76); // Setting in Fahrenheit scale
+let temp = thermos.temperature; // 24.44 in Celsius
+thermos.temperature = 26;
+temp = thermos.temperature; // 26 in Celsius
 
 
 // 22 ES6: Create a Module Script
